@@ -67,7 +67,6 @@ def DCG(query, target_set, k):
 
 def load_query(path):
     query = np.load(path, allow_pickle=True)
-
     return query
 
 
@@ -86,18 +85,14 @@ def parse_options(parser):
     parser.add_argument('--n_elements', type=int, default=50)
     parser.add_argument('--d', type=int, default=300, help='dimension of each cell')
     parser.add_argument('--t', type=float, default=0.08)
+    parser.add_argument('--tau', type=float, default=0.2)
+    parser.add_argument('--type', type=str, default="mat")
     parser.add_argument('--momentum', type=float, default=0.9999)
     parser.add_argument('--lr', type=float, default=1e-2)
-    parser.add_argument('--rank', type=int, default=3)
     parser.add_argument('--dropout', type=float, default=0.3)
     parser.add_argument('--topk', type=int, default=25)
     parser.add_argument('--datasets', type=str, default='WikiTable')
-    parser.add_argument('--test_path_mat', type=str, default="../datasets/Lake/WikiTable/target.npy")
-    parser.add_argument('--query', type=str, default="../datasets/Lake/WikiTable/query.npy")
-    parser.add_argument('--gt', type=str, default="../datasets/Lake/WikiTable/t=0.2/test/index.csv")
-    parser.add_argument('--model_mat', type=str, default="../check/" + "WikiTable/" + "t=0.2_gendata_mat_leveltrained.pth")
-    parser.add_argument('--anchor_path', type=str, default="../datasets/Lake/WikiTable/t=0.2/train/mat_level/anchor.npy")
-    parser.add_argument('--auglist_path', type=str, default="../datasets/Lake/WikiTable/t=0.2/train/mat_level/auglist.npy")
+    parser.add_argument('--version', type=str, default='t=0.2_gendata_mat_level')
     parser.add_argument('--list_size', type=int, default=3)
     parser.add_argument('--da', type=str, default='True')
 
