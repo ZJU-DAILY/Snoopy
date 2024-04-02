@@ -1,5 +1,4 @@
-import time
-
+from utils import *
 import fasttext
 import argparse
 import numpy as np
@@ -212,13 +211,31 @@ def augment_mat_level(path_load, anchor_path, aug_path, y_path, tau=0.1, k=5):
         for row in y_list:
             writer.writerow(row)
 
-from utils import *
+
+def parse_ops(parser):
+    parser.add_argument('--datasets', type=str, default='WikiTable')
+    parser.add_argument('--tau', type=float, default=0.2)
+    parser.add_argument('--list_size', type=int, default=3)
+    parser.add_argument('--type', type=str, default='mat')
+    return parser.parse_args()
+
 
 fix_seed(2024)
-augment_mat_level("../datasets/Lake/WikiTable/target.npy",
-                  "../datasets/Lake/WikiTable/t=0.2/train/mat_level/anchor.npy",
-                  "../datasets/Lake/WikiTable/t=0.2/train/mat_level/auglist.npy",
-                  "../datasets/Lake/WikiTable/t=0.2/train/mat_level/auglist_y.csv",
-                  tau=0.2,  k=3)
-# augment_text_level("../datasets/opendata/train/train.csv","../datasets/opendata/train/anchor.csv", "../datasets/opendata/train/auglist.csv")
-# text2vec("../datasets/opendata/t=0.2/target.csv", "../datasets/opendata/t=0.2/target.npy")
+parser = argparse.ArgumentParser()
+args = parse_ops(parser)
+text2vec("../datasets/Lake/"+args.datasets+"target.csv", "../datasets/Lake/"+args.datasets+"target.npy")
+text2vec("../datasets/Lake/"+args.datasets+"query.csv", "../datasets/Lake/"+args.datasets+"query.npy")
+if args.type == 'mat':
+    augment_mat_level("../datasets/Lake/"+args.datasets+"/target.npy",
+                      "../datasets/Lake/"+args.datasets+"/t="+str(args.tau)+"/train/mat_level/anchor.npy",
+                      "../datasets/Lake/"+args.datasets+"/t="+str(args.tau)+"/train/mat_level/auglist.npy",
+                      "../datasets/Lake/"+args.datasets+"/t="+str(args.tau)+"/train/mat_level/auglist_y.csv",
+                      tau=args.tau,  k=args.list_size)
+else:
+    augment_text_level("../datasets/Lake/"+args.datasets+"/train.csv",
+                       "../datasets/Lake/"+args.datasets+"/train/text_level/anchor.csv",
+                       "../datasets/Lake/"+args.datasets+"/train/text_level/pos.csv")
+    text2vec("../datasets/Lake/"+args.datasets+"/train/text_level/anchor.csv",
+             "../datasets/Lake/"+args.datasets+"/train/text_level/anchor.npy")
+    text2vec("../datasets/Lake/"+args.datasets+"/train/text_level/pos.csv",
+                 "../datasets/Lake/"+args.datasets+"/train/text_level/pos.npy")
