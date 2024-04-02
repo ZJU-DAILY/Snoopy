@@ -13,9 +13,42 @@ columns for guiding the column mapping process, a rank-aware contrastive learnin
 Please refer to the source code to install all required packages in Python.
 
 ## Datasets
-
+We pre-processed WikiTable, opendata, and WDC to form our [experimental datasets](https://drive.google.com/drive/folders/19vwb45WCayF2j8oPOFf2QVHVopIrgFva?usp=sharing) . We provide the data lake, queries, and the top-k ground truth labeled by PEXESO under the default threshold. 
 
 ## Run Experimental Case
+To construct training data:
+
+```
+python DataGen.py --datasets "WikiTable" --type mat --tau 0.2 --list_size 3
+```
+
+To learn pivot columns using the generated data:
+
+```
+python train.py --datasets "WikiTable" --type mat --tau 0.2 --list_size 3 --version Your_Model_Version
+```
+
+To perform semantically joinable table search via learned pivot columns:
+
+```
+python search.py --datasets "WikiTable" --version Your_Model_Version --topk 25
+```
+
+## Parameters
+- `--datasets`: the dataset used (e.g., "WikiTable")
+
+- `--type`: which data generation strategy to be used ("mat" means embedding-level, and "text" means text-level)
+
+- `--tau`: the threshold of cell matching
+
+- `--list_size`: the size of positive ranking list
+
+- `--version`: the model version you saved during training phase and used for online search
+
+- `--topk`: top-k joinable columns will be returned
 
 
 ## Acknowledgementt
+The original datasets are form [WikiTable](http://websail-fe.cs.northwestern.edu/TabEL/), [opendata](https://arxiv.org/pdf/2209.13589.pdf), and [WDC Web Table Corpus](http://webdatacommons.org/webtables/2015/downloadInstructions.html).
+
+The baseline [Deepjoin](https://www.vldb.org/pvldb/vol16/p2458-dong.pdf) is implemented with the details provided by the authors after contacting them.
