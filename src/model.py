@@ -109,8 +109,20 @@ class Trainer(object):
         self.aug_list_index_queue =[]
         self.label_queue = []
         self.device = torch.device(self.args.device)
-        train_dataset = MyDataset(self.args.anchor_path, self.args.auglist_path, list_size = self.args.list_size, training ='true', plm=self.args.plm)
-        lake = TestDataset(self.args.test_path_mat, None, plm=self.args.plm)
+        if self.args.type == "mat":
+            anchor_path = "../datasets/Lake/"+self.args.datasets+"/t="+str(self.args.tau)\
+                          +"/train/mat_level/anchor.npy"
+            auglist_path = "../datasets/Lake/" + self.args.datasets + "/t=" + str(self.args.tau)\
+                           + "/train/mat_level/auglist.npy"
+        else:
+            anchor_path = "../datasets/Lake/" + self.args.datasets + "/t=" + str(self.args.tau)\
+                          + "/train/text_level/anchor.npy"
+            auglist_path = "../datasets/Lake/" + self.args.datasets + "/t=" + str(self.args.tau)\
+                           + "/train/text_level/pos.npy"
+        test_path_mat = "../datasets/Lake/" + self.args.datasets +"/target.npy"
+        query_path = "../datasets/Lake/" + self.args.datasets +"/query.npy"
+        train_dataset = MyDataset(anchor_path, auglist_path, list_size = self.args.list_size, training ='true', plm=self.args.plm)
+        lake = TestDataset(test_path_mat, None, plm=self.args.plm)
         self.loader = Data.DataLoader(dataset=train_dataset,
                                      batch_size=self.args.batch_size,
                                      shuffle=True,
@@ -122,18 +134,19 @@ class Trainer(object):
                                      shuffle=False,
                                      num_workers=0,
                                      collate_fn=lake.pad)
-        self.query = load_query(self.args.query)
-        self.lake = np.load(self.args.test_path_mat, allow_pickle=True)
+        self.query = load_query(query_path)
+        self.lake = np.load(test_path_mat, allow_pickle=True)
         self.model = Scorpion(self.args).to(self.device)
         self._model = Scorpion(self.args).to(self.device)
         self._model.update(self.model)
         self.lr = self.args.lr
         self.optimizer = optim.Adam(params=self.model.parameters(), lr=self.lr)
         self.scheduler = StepLR(self.optimizer, step_size=50, gamma=0.5)
+        self.gt = "../datasets/Lake/"+self.args.datasets+"/t="+str(self.args.tau)+"/test/index.csv"
 
 
     def test_without_train(self):
-        with open(self.args.gt, 'r') as file:
+        with open(self.gt, 'r') as file:
             csv_reader = csv.reader(file)
             gt = []
             for row in csv_reader:
@@ -146,7 +159,7 @@ class Trainer(object):
         all_pos_batches = []
         best = 0
         print("begining training.....")
-        with open(self.args.gt, 'r') as file:
+        with open(self.gt, 'r') as file:
             csv_reader = csv.reader(file)
             gt = []
             for row in csv_reader:
@@ -206,7 +219,7 @@ class Trainer(object):
                     if pre > best:
                         # save_model(self.model, "../check/" + self.args.datasets + "/", "mixmodel_list=5")
                         # input the number of version
-                        save_model(self.model, "../check/"+self.args.datasets+"/", "version_num")
+                        save_model(self.model, "../check/"+self.args.datasets+"/", + self.args.version)
                         best = pre
                 self._model.update(self.model)
                 del anchor
@@ -248,7 +261,7 @@ class Trainer(object):
 
 
     def search(self, model_path, topk):
-        with open(self.args.gt, 'r') as file:
+        with open(self.gt, 'r') as file:
             csv_reader = csv.reader(file)
             gt = []
             for row in csv_reader:
@@ -285,13 +298,3 @@ class Trainer(object):
 
             ndcg = cal_NDCG(self.query, self.lake, topk_indices, gt, 25)
             print("NDCG@25: {}".format(ndcg))
-
-
-
-
-
-
-
-
-
-
