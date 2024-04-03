@@ -1,7 +1,7 @@
 # **Scorpion: Effective and Efficient Semantically Joinable Table Search via Pivot Columns**
 
 Scorpion: an effective and efficient semantically
-joinable table search framework powered by the pivot-column-based column embeddings. The proposed column embeddings are obtained from the column-to-pivot-column relationships captured by a lightweight approximate-graph-matching-based column mapping. To acquire good pivot
+joinable table search framework powered by pivot-column-based column embeddings. The proposed column embeddings are obtained from the column-to-pivot-column relationships captured by a lightweight approximate-graph-matching-based column mapping. To acquire good pivot
 columns for guiding the column mapping process, a rank-aware contrastive learning paradigm is introduced.
 ## Requirements
 
@@ -13,7 +13,7 @@ columns for guiding the column mapping process, a rank-aware contrastive learnin
 Please refer to the source code to install all required packages in Python.
 
 ## Datasets
-We pre-processed WikiTable, opendata, and WDC to form our [experimental datasets](https://drive.google.com/drive/folders/19vwb45WCayF2j8oPOFf2QVHVopIrgFva?usp=sharing) . We provide the data lake, queries, and the top-k ground truth labeled by PEXESO under the default threshold. 
+We pre-processed WikiTable, opendata, and WDC to form our [experimental datasets](https://drive.google.com/drive/folders/19vwb45WCayF2j8oPOFf2QVHVopIrgFva?usp=sharing). We provide the data lake, queries, and the top-k ground truth labeled by PEXESO under the default threshold. 
 
 ## Run Experimental Case
 To construct training data:
@@ -41,9 +41,9 @@ python search.py --datasets "WikiTable" --version Your_Model_Version --topk 25
 
 - `--tau`: the threshold of cell matching
 
-- `--list_size`: the size of positive ranking list
+- `--list_size`: the size of the positive ranking list
 
-- `--version`: the model version you saved during training phase and used for online search
+- `--version`: the model version you saved during the training phase and used for online search
 
 - `--topk`: top-k joinable columns will be returned
 
