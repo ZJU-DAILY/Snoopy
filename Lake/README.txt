@@ -1,2 +1,0 @@
-We only show a sampling dataset of WikiTable (1k cols in target.csv), as the datasets are too large.
-We provide all the datasets on https://drive.google.com/drive/folders/19vwb45WCayF2j8oPOFf2QVHVopIrgFva
