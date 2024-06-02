@@ -1,4 +1,4 @@
-# **Snoopy: Effective and Efficient Semantic Join Discovery via Proxy Columns![My Logo](https://github.com/ZJU-DAILY/Snoopy/blob/main/snoopy.jpg)**
+# **Snoopy: Effective and Efficient Semantic Join Discovery via Proxy Columns <img src="[path/to/logo.png](https://github.com/ZJU-DAILY/Snoopy/blob/main/snoopy.jpg)" alt="My Logo" width="50" />**
 Snoopy: an effective and efficient semantic join discovery framework powered by proxy-column-based column embeddings. The proposed column embeddings are obtained from the column-to-proxy-column relationships captured by a lightweight approximate-graph-matching-based column projection function. To acquire good pivot columns for guiding the column projection process, a rank-aware contrastive learning paradigm is introduced.
 ## Requirements
 
