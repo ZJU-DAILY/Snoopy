@@ -1,8 +1,6 @@
-# **Scorpion: Effective and Efficient Semantically Joinable Table Search via Pivot Columns**
+# **Snoopy: Effective and Efficient Semantic Join Discovery via Proxy Columns**
 
-Scorpion: an effective and efficient semantically
-joinable table search framework powered by pivot-column-based column embeddings. The proposed column embeddings are obtained from the column-to-pivot-column relationships captured by a lightweight approximate-graph-matching-based column mapping. To acquire good pivot
-columns for guiding the column mapping process, a rank-aware contrastive learning paradigm is introduced.
+Snoopy: an effective and efficient semantic join discovery framework powered by proxy-column-based column embeddings. The proposed column embeddings are obtained from the column-to-proxy-column relationships captured by a lightweight approximate-graph-matching-based column projection function. To acquire good pivot columns for guiding the column projection process, a rank-aware contrastive learning paradigm is introduced.
 ## Requirements
 
 * Python 3.7
@@ -13,7 +11,7 @@ columns for guiding the column mapping process, a rank-aware contrastive learnin
 Please refer to the source code to install all required packages in Python.
 
 ## Datasets
-We pre-processed WikiTable, opendata, and WDC to form our [experimental datasets](https://drive.google.com/drive/folders/19vwb45WCayF2j8oPOFf2QVHVopIrgFva?usp=sharing). We provide the data lake, queries, and the top-k ground truth labeled by PEXESO under the default threshold. 
+We use WikiTable, Opendata, and WDC. We provide our [experimental datasets](https://drive.google.com/drive/folders/19vwb45WCayF2j8oPOFf2QVHVopIrgFva?usp=sharing). 
 
 ## Run Experimental Case
 To construct training data:
@@ -22,13 +20,13 @@ To construct training data:
 python DataGen.py --datasets "WikiTable" --type mat --tau 0.2 --list_size 3
 ```
 
-To learn pivot columns using the generated data:
+To learn proxy columns using the generated data:
 
 ```
 python train.py --datasets "WikiTable" --type mat --tau 0.2 --list_size 3 --version Your_Model_Version
 ```
 
-To perform semantically joinable table search via learned pivot columns:
+To perform semantically join search via learned proxy columns:
 
 ```
 python search.py --datasets "WikiTable" --version Your_Model_Version --topk 25
